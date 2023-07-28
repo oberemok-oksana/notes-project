@@ -175,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     tdDelete.append(imgDelete);
 
-    // tdCategory.append(imgTask);
     trNote.append(
       tdCategory,
       tdTitle,
@@ -188,6 +187,8 @@ document.addEventListener("DOMContentLoaded", () => {
       tdDelete
     );
     notesList.append(trNote);
+
+    noteCreatingForm.reset();
   };
 
   data.map((note) => {
