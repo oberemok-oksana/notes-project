@@ -38,7 +38,7 @@ let data = [
     created: "May 05, 2021",
     category: "Idea",
     content: "Implement new",
-    dates: "3/5/2021, 5/5/2021",
+    dates: "03/05/2021, 05/05/2021",
     id: 3,
   },
   {
@@ -67,6 +67,11 @@ const createDate = () => {
   return `${MONTHS[month]} ${day}, ${year}`;
 };
 
+const formatDate = (date) => {
+  const formattedDate = date.split("-").reverse().join("/");
+  return formattedDate;
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.querySelector("#create-note-btn");
   const noteCreatingForm = document.querySelector("#note-creating-form");
@@ -74,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteTitleInput = document.querySelector("#name");
   const categoriesSelect = document.querySelector("#categories");
   const noteTextarea = document.querySelector("#note-content");
+  const noteDates = document.querySelector(".dates");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -86,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     note.content = noteTextarea.value;
     note.category = categoriesSelect.value;
     note.created = createDate();
-    note.dates = "";
+    note.dates = formatDate(noteDates.value);
     note.id = nanoid();
     data.push(note);
     createNote(note);
@@ -123,6 +129,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdNoteContent = document.createElement("td");
     tdNoteContent.innerText = note.content;
 
+    const tdDates = document.createElement("td");
+    tdDates.innerText = note.dates;
+
     const tdEdit = document.createElement("td");
     const imgEdit = document.createElement("img");
     imgEdit.src = "./public/images/icons8-edit-24.png";
@@ -152,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
       tdCreatedDate,
       tdCategoryText,
       tdNoteContent,
+      tdDates,
       tdEdit,
       tdArchive,
       tdDelete
