@@ -154,26 +154,34 @@ document.addEventListener("DOMContentLoaded", () => {
     tdDates.innerText = note.dates;
 
     const tdEdit = document.createElement("td");
+
     const imgEdit = document.createElement("img");
+    const divWrapperEdit = document.createElement("div");
+    divWrapperEdit.classList.add("staticCell");
     imgEdit.src = "./public/images/icons8-edit-24.png";
     imgEdit.alt = "edit";
-
-    tdEdit.append(imgEdit);
+    divWrapperEdit.append(imgEdit);
+    tdEdit.append(divWrapperEdit);
 
     const tdArchive = document.createElement("td");
+
     const imgArchive = document.createElement("img");
+    const divWrapperArchive = document.createElement("div");
+    divWrapperArchive.classList.add("staticCell");
     imgArchive.src = "./public/images/icons8-download-24.png";
     imgArchive.alt = "archive";
-
-    tdArchive.append(imgArchive);
+    divWrapperArchive.append(imgArchive);
+    tdArchive.append(divWrapperArchive);
 
     const tdDelete = document.createElement("td");
+    const divWrapper = document.createElement("div");
+    divWrapper.classList.add("staticCell");
     const imgDelete = document.createElement("img");
     imgDelete.classList.add("delete");
     imgDelete.src = "./public/images/icons8-delete-24.png";
     imgDelete.alt = "delete";
-
-    tdDelete.append(imgDelete);
+    divWrapper.append(imgDelete);
+    tdDelete.append(divWrapper);
 
     trNote.append(
       tdCategory,
