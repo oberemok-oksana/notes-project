@@ -29,29 +29,49 @@
         <tbody id="notes-list"></tbody>
       </table>
       <button class="button" id="create-note-btn">Create Note</button>
-    </main>
-    <form class="card" id="note-creating-form">
-      <input class="input" type="text" id="name" placeholder="Note title" />
-      <div class="wrapper">
-        <label for="categories">Choose a note category:</label>
-        <select class="select" name="categories" id="categories">
-          <option value="Default">Choose something</option>
-          <option value="Task">Task</option>
-          <option value="Random Thought">Random Thought</option>
-          <option value="Idea">Idea</option>
-          <option value="Quotes">Quotes</option>
-        </select>
+      <form class="card" id="note-creating-form">
+        <input class="input" type="text" id="name" placeholder="Note title" />
+        <div class="wrapper">
+          <label for="categories">Choose a note category:</label>
+          <select class="select" name="categories" id="categories">
+            <option value="Default">Choose something</option>
+            <option value="Task">Task</option>
+            <option value="Random Thought">Random Thought</option>
+            <option value="Idea">Idea</option>
+            <option value="Quotes">Quotes</option>
+          </select>
+        </div>
+
+        <textarea
+          class="input"
+          name="note"
+          id="note-content"
+          cols="30"
+          rows="10"
+        ></textarea>
+        <button type="submit" class="button" id="save-note-btn">Save</button>
+      </form>
+
+      <div>
+        <table class="table">
+          <thead class="table-head">
+            <tr>
+              <th>Note Category</th>
+              <th>Active</th>
+              <th>Archived</th>
+            </tr>
+          </thead>
+          <tbody class="archive">
+            <tr class="table-data">
+              <td>Image Task</td>
+              <td>13</td>
+              <td>7</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <input class="dates" type="date" />
-      <textarea
-        class="input"
-        name="note"
-        id="note-content"
-        cols="30"
-        rows="10"
-      ></textarea>
-      <button type="submit" class="button" id="save-note-btn">Save</button>
-    </form>
+    </main>
+
     <script type="module" src="/main.js"></script>
   </body>
 </html>
