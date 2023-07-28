@@ -105,18 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdCategory = document.createElement("td");
     tdCategory.classList.add("category");
 
-    const imgTask = document.createElement("img");
-    imgTask.src = "./public/images/icons8-cart-30.png";
-    imgTask.alt = "task";
-
-    const imgThought = document.createElement("img");
-    imgThought.src = "./public/images/icons8-mind-30.png";
-    imgThought.alt = "random thought";
-
-    const imgIdea = document.createElement("img");
-    imgIdea.src = "./public/images/icons8-light-on-30.png";
-    imgIdea.alt = "idea";
-
     const tdTitle = document.createElement("td");
     tdTitle.innerText = note.title || "";
 
@@ -125,6 +113,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tdCategoryText = document.createElement("td");
     tdCategoryText.innerText = note.category;
+
+    switch (note.category) {
+      case "Task":
+        const imgTask = document.createElement("img");
+        imgTask.src = "./public/images/icons8-cart-30.png";
+        imgTask.alt = "task";
+        tdCategory.append(imgTask);
+        break;
+      case "Random Thought":
+        const imgThought = document.createElement("img");
+        imgThought.src = "./public/images/icons8-mind-30.png";
+        imgThought.alt = "random thought";
+        tdCategory.append(imgThought);
+        break;
+      case "Idea":
+        const imgIdea = document.createElement("img");
+        imgIdea.src = "./public/images/icons8-light-on-30.png";
+        imgIdea.alt = "idea";
+        tdCategory.append(imgIdea);
+        break;
+      case "Quote":
+        const imgQuote = document.createElement("img");
+        imgQuote.src = "./public/images/icons8-get-quote-30.png";
+        imgQuote.alt = "quote";
+        tdCategory.append(imgQuote);
+        break;
+      default:
+        const imgDefault = document.createElement("img");
+        imgDefault.src = "./public/images/icons8-cart-30.png";
+        imgDefault.alt = "quote";
+        tdCategory.append(imgDefault);
+        break;
+    }
 
     const tdNoteContent = document.createElement("td");
     tdNoteContent.innerText = note.content;
@@ -154,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     tdDelete.append(imgDelete);
 
-    tdCategory.append(imgTask);
+    // tdCategory.append(imgTask);
     trNote.append(
       tdCategory,
       tdTitle,
