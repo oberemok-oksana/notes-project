@@ -26,78 +26,11 @@
             </th>
           </tr>
         </thead>
-        <tbody id="notes-list">
-          <tr class="table-data">
-            <td>
-              <div class="category">
-                <img
-                  src="./public/images/icons8-cart-30.png"
-                  alt="shopping cart"
-                />
-              </div>
-            </td>
-            <td>Shopping list</td>
-            <td>April 20, 2021</td>
-            <td>task</td>
-            <td>Tomatoes, bread</td>
-            <td></td>
-            <td><img src="./public/images/icons8-edit-24.png" alt="edit" /></td>
-            <td>
-              <img src="./public/images/icons8-download-24.png" alt="archive" />
-            </td>
-            <td>
-              <img src="./public/images/icons8-delete-24.png" alt="delete" />
-            </td>
-          </tr>
-          <tr class="table-data">
-            <td>
-              <div class="category">
-                <img
-                  src="./public/images/icons8-mind-30.png"
-                  alt="head with an idea"
-                />
-              </div>
-            </td>
-            <td>The theory of evolut..</td>
-            <td>April 27, 2021</td>
-            <td>Random thought</td>
-            <td>The evolution</td>
-            <td></td>
-            <td><img src="./public/images/icons8-edit-24.png" alt="edit" /></td>
-            <td>
-              <img src="./public/images/icons8-download-24.png" alt="archive" />
-            </td>
-            <td>
-              <img src="./public/images/icons8-delete-24.png" alt="delete" />
-            </td>
-          </tr>
-          <tr class="table-data">
-            <td>
-              <div class="category">
-                <img
-                  src="./public/images/icons8-light-on-30.png"
-                  alt="lamp bulb"
-                />
-              </div>
-            </td>
-            <td>New Feature</td>
-            <td>May 05, 2021</td>
-            <td>Idea</td>
-            <td>Implement new</td>
-            <td>3/5/2021, 5/5/2021</td>
-            <td><img src="./public/images/icons8-edit-24.png" alt="edit" /></td>
-            <td>
-              <img src="./public/images/icons8-download-24.png" alt="archive" />
-            </td>
-            <td>
-              <img src="./public/images/icons8-delete-24.png" alt="delete" />
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="notes-list"></tbody>
       </table>
       <button class="button" id="create-note-btn">Create Note</button>
     </main>
-    <div class="card" id="note-creating-card">
+    <form class="card" id="note-creating-form">
       <input class="input" type="text" id="name" placeholder="Note title" />
       <div class="wrapper">
         <label for="categories">Choose a note category:</label>
@@ -115,8 +48,8 @@
         cols="30"
         rows="10"
       ></textarea>
-      <button class="button" id="save-note-btn">Save</button>
-    </div>
+      <button type="submit" class="button" id="save-note-btn">Save</button>
+    </form>
     <script type="module" src="/main.js"></script>
   </body>
 </html>
