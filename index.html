@@ -26,7 +26,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="grid">
+        <tbody id="notes-list">
           <tr class="table-data">
             <td>
               <div class="category">
@@ -95,16 +95,17 @@
           </tr>
         </tbody>
       </table>
-      <button class="button" id="create-note">Create Note</button>
+      <button class="button" id="create-note-btn">Create Note</button>
     </main>
     <div class="card" id="note-creating-card">
       <input class="input" type="text" id="name" placeholder="Note title" />
       <div class="wrapper">
         <label for="categories">Choose a note category:</label>
         <select class="select" name="categories" id="categories">
-          <option value="task">Task</option>
-          <option value="thought">Random Thought</option>
-          <option value="idea">Idea</option>
+          <option value="Default">Choose something</option>
+          <option value="Task">Task</option>
+          <option value="Random Thought">Random Thought</option>
+          <option value="Idea">Idea</option>
         </select>
       </div>
       <textarea
@@ -114,7 +115,7 @@
         cols="30"
         rows="10"
       ></textarea>
-      <button class="button">Save</button>
+      <button class="button" id="save-note-btn">Save</button>
     </div>
     <script type="module" src="/main.js"></script>
   </body>
