@@ -68,13 +68,12 @@ const createDate = () => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const createNoteBtn = document.getElementById("create-note-btn");
-  const noteCreatingForm = document.getElementById("note-creating-form");
-  const notesList = document.getElementById("notes-list");
-  const noteTitleInput = document.getElementById("name");
-  const categoriesSelect = document.getElementById("categories");
-  const noteTextarea = document.getElementById("note-content");
-  const deleteBtn = document.querySelectorAll(".delete");
+  const createNoteBtn = document.querySelector("#create-note-btn");
+  const noteCreatingForm = document.querySelector("#note-creating-form");
+  const notesList = document.querySelector("#notes-list");
+  const noteTitleInput = document.querySelector("#name");
+  const categoriesSelect = document.querySelector("#categories");
+  const noteTextarea = document.querySelector("#note-content");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
