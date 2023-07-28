@@ -1,4 +1,6 @@
 import "./style.css";
+import { nanoid } from "nanoid";
+
 const MONTHS = [
   "January",
   "February",
@@ -14,13 +16,14 @@ const MONTHS = [
   "December",
 ];
 
-const data = [
+let data = [
   {
     title: "Shopping list",
     created: "April 20, 2021",
     category: "Task",
     dates: "",
     content: "Tomatoes, bread",
+    id: 1,
   },
   {
     title: "The theory of evolut..",
@@ -28,6 +31,7 @@ const data = [
     category: "Random Thought",
     dates: "",
     content: "The evolution",
+    id: 2,
   },
   {
     title: "New Feature",
@@ -35,6 +39,7 @@ const data = [
     category: "Idea",
     content: "Implement new",
     dates: "3/5/2021, 5/5/2021",
+    id: 3,
   },
   {
     title: "William Gaddis",
@@ -42,6 +47,7 @@ const data = [
     category: "Quote",
     content: "Power doesn't co..",
     dates: "",
+    id: 4,
   },
   {
     title: "Books",
@@ -49,6 +55,7 @@ const data = [
     category: "Task",
     content: "The Lean Startup",
     dates: "",
+    id: 5,
   },
 ];
 
@@ -67,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteTitleInput = document.getElementById("name");
   const categoriesSelect = document.getElementById("categories");
   const noteTextarea = document.getElementById("note-content");
-  const saveNoteBtn = document.getElementById("save-note-btn");
+  const deleteBtn = document.querySelectorAll(".delete");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -81,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     note.category = categoriesSelect.value;
     note.created = createDate();
     note.dates = "";
+    note.id = nanoid();
     data.push(note);
     createNote(note);
   });
@@ -88,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const createNote = (note) => {
     const trNote = document.createElement("tr");
     trNote.classList.add("table-data");
+    trNote.dataset.id = note.id;
     const tdCategory = document.createElement("td");
     tdCategory.classList.add("category");
 
@@ -131,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tdDelete = document.createElement("td");
     const imgDelete = document.createElement("img");
+    imgDelete.classList.add("delete");
     imgDelete.src = "./public/images/icons8-delete-24.png";
     imgDelete.alt = "delete";
 
@@ -153,4 +163,18 @@ document.addEventListener("DOMContentLoaded", () => {
   data.map((note) => {
     createNote(note);
   });
+
+  notesList.addEventListener("click", (e) => {
+    const noteId = e.target.closest("tr").dataset.id;
+
+    if (e.target.matches(".delete")) {
+      data = deleteNote(noteId);
+      e.target.closest("tr").remove();
+    }
+  });
+
+  const deleteNote = (id) => {
+    const filteredData = data.filter((note) => note.id !== id);
+    return filteredData;
+  };
 });
