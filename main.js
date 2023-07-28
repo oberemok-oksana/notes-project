@@ -52,35 +52,40 @@ const data = [
   },
 ];
 
+const createDate = () => {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  return `${MONTHS[month]} ${day}, ${year}`;
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.getElementById("create-note-btn");
-  const noteCreatingCard = document.getElementById("note-creating-card");
+  const noteCreatingForm = document.getElementById("note-creating-form");
   const notesList = document.getElementById("notes-list");
   const noteTitleInput = document.getElementById("name");
   const categoriesSelect = document.getElementById("categories");
   const noteTextarea = document.getElementById("note-content");
   const saveNoteBtn = document.getElementById("save-note-btn");
-  let noteTitle;
-  let category;
-  let noteContent;
 
   createNoteBtn.addEventListener("click", () => {
-    noteCreatingCard.classList.toggle("visible");
+    noteCreatingForm.classList.toggle("visible");
   });
 
-  noteTitleInput.addEventListener("change", (e) => {
-    noteTitle = e.target.value;
+  noteCreatingForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const note = {};
+    note.title = noteTitleInput.value;
+    note.content = noteTextarea.value;
+    note.category = categoriesSelect.value;
+    note.created = createDate();
+    note.dates = "";
+    data.push(note);
+    createNote(note);
   });
 
-  categoriesSelect.addEventListener("change", (e) => {
-    category = e.target.value;
-  });
-
-  noteTextarea.addEventListener("change", (e) => {
-    noteContent = e.target.value;
-  });
-
-  saveNoteBtn.addEventListener("click", () => {
+  const createNote = (note) => {
     const trNote = document.createElement("tr");
     trNote.classList.add("table-data");
     const tdCategory = document.createElement("td");
@@ -99,20 +104,16 @@ document.addEventListener("DOMContentLoaded", () => {
     imgIdea.alt = "idea";
 
     const tdTitle = document.createElement("td");
-    tdTitle.innerText = noteTitle || "";
+    tdTitle.innerText = note.title || "";
 
     const tdCreatedDate = document.createElement("td");
-    const date = new Date();
-    const day = date.getDate();
-    const month = date.getMonth();
-    const year = date.getFullYear();
-    tdCreatedDate.textContent = `${MONTHS[month]} ${day}, ${year}`;
+    tdCreatedDate.innerText = createDate();
 
     const tdCategoryText = document.createElement("td");
-    tdCategoryText.innerText = category;
+    tdCategoryText.innerText = note.category;
 
     const tdNoteContent = document.createElement("td");
-    tdNoteContent.innerText = noteContent;
+    tdNoteContent.innerText = note.content;
 
     const tdEdit = document.createElement("td");
     const imgEdit = document.createElement("img");
@@ -147,14 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
       tdDelete
     );
     notesList.append(trNote);
-    const newNote = {
-      title: noteTitle,
-      created: `${MONTHS[month]} ${day}, ${year}`,
-      category,
-      dates: "",
-      content: noteContent,
-    };
-    data.push(newNote);
-    console.log(data);
+  };
+
+  data.map((note) => {
+    createNote(note);
   });
 });
