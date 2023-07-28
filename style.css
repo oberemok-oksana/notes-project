@@ -57,7 +57,7 @@ body {
 }
 
 .card {
-  display: flex;
+  display: none;
   flex-direction: column;
   width: 500px;
   gap: 10px;
@@ -80,4 +80,8 @@ body {
   width: fit-content;
   padding: 5px;
   border-radius: 4px;
+}
+
+.visible {
+  display: flex;
 }
