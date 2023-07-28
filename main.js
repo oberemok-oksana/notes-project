@@ -16,6 +16,9 @@ const MONTHS = [
   "December",
 ];
 
+const REGEXDATE =
+  /(?:^|\D)(?:(?:0?[1-9]|[12][0-9]|3[01])\/(?:0?[1-9]|1[0-2])\/(?:\d{4}))(?:\D|$)/gm;
+
 let data = [
   {
     title: "Shopping list",
@@ -24,6 +27,7 @@ let data = [
     dates: "",
     content: "Tomatoes, bread",
     id: 1,
+    active: true,
   },
   {
     title: "The theory of evolut..",
@@ -32,6 +36,7 @@ let data = [
     dates: "",
     content: "The evolution",
     id: 2,
+    active: true,
   },
   {
     title: "New Feature",
@@ -40,6 +45,7 @@ let data = [
     content: "Implement new",
     dates: "03/05/2021, 05/05/2021",
     id: 3,
+    active: true,
   },
   {
     title: "William Gaddis",
@@ -48,6 +54,7 @@ let data = [
     content: "Power doesn't co..",
     dates: "",
     id: 4,
+    active: true,
   },
   {
     title: "Books",
@@ -56,6 +63,7 @@ let data = [
     content: "The Lean Startup",
     dates: "",
     id: 5,
+    active: true,
   },
 ];
 
@@ -67,11 +75,6 @@ const createDate = () => {
   return `${MONTHS[month]} ${day}, ${year}`;
 };
 
-const formatDate = (date) => {
-  const formattedDate = date.split("-").reverse().join("/");
-  return formattedDate;
-};
-
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.querySelector("#create-note-btn");
   const noteCreatingForm = document.querySelector("#note-creating-form");
@@ -80,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriesSelect = document.querySelector("#categories");
   const noteTextarea = document.querySelector("#note-content");
   const noteDates = document.querySelector(".dates");
+  const archive = document.querySelector(".archive");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -92,8 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
     note.content = noteTextarea.value;
     note.category = categoriesSelect.value;
     note.created = createDate();
-    note.dates = formatDate(noteDates.value);
+    note.dates = noteTextarea.value.match(REGEXDATE) || "";
     note.id = nanoid();
+    note.active = true;
+    console.log(noteTextarea.value, noteTextarea.value.match(REGEXDATE));
     data.push(note);
     createNote(note);
   });
