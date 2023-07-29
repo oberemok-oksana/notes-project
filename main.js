@@ -85,6 +85,36 @@ const createDate = () => {
   return `${MONTHS[month]} ${day}, ${year}`;
 };
 
+const getCategoryImage = (category) => {
+  const img = document.createElement("img");
+
+  switch (category) {
+    case "Task":
+      img.src = "./public/images/icons8-cart-30.png";
+      img.alt = "task";
+      return img;
+
+    case "Random Thought":
+      img.src = "./public/images/icons8-mind-30.png";
+      img.alt = "random thought";
+      return img;
+
+    case "Idea":
+      img.src = "./public/images/icons8-light-on-30.png";
+      img.alt = "idea";
+      return img;
+
+    case "Quote":
+      img.src = "./public/images/icons8-get-quote-30.png";
+      img.alt = "quote";
+      return img;
+    default:
+      img.src = "./public/images/icons8-cart-30.png";
+      img.alt = "quote";
+      return img;
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.querySelector("#create-note-btn");
   const noteCreatingForm = document.querySelector("#note-creating-form");
@@ -105,6 +135,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const archivedIdeaNotes = document.querySelector(".archived-idea-notes");
   const activeQuoteNotes = document.querySelector(".active-quote-notes");
   const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
+  //edit-form
+  const noteEditForm = document.querySelector("#note-edit-form");
+  const noteEditTitleInput = document.querySelector("#form-edit__title");
+  const categoriesEditSelect = document.querySelector("#form-edit__categories");
+  const noteEditTextarea = document.querySelector("#note-edit-content");
+  const noteEditIdInput = document.querySelector("#hidden");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -141,38 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdCategoryText = document.createElement("td");
     tdCategoryText.innerText = note.category;
 
-    switch (note.category) {
-      case "Task":
-        const imgTask = document.createElement("img");
-        imgTask.src = "./public/images/icons8-cart-30.png";
-        imgTask.alt = "task";
-        tdCategory.append(imgTask);
-        break;
-      case "Random Thought":
-        const imgThought = document.createElement("img");
-        imgThought.src = "./public/images/icons8-mind-30.png";
-        imgThought.alt = "random thought";
-        tdCategory.append(imgThought);
-        break;
-      case "Idea":
-        const imgIdea = document.createElement("img");
-        imgIdea.src = "./public/images/icons8-light-on-30.png";
-        imgIdea.alt = "idea";
-        tdCategory.append(imgIdea);
-        break;
-      case "Quote":
-        const imgQuote = document.createElement("img");
-        imgQuote.src = "./public/images/icons8-get-quote-30.png";
-        imgQuote.alt = "quote";
-        tdCategory.append(imgQuote);
-        break;
-      default:
-        const imgDefault = document.createElement("img");
-        imgDefault.src = "./public/images/icons8-cart-30.png";
-        imgDefault.alt = "quote";
-        tdCategory.append(imgDefault);
-        break;
-    }
+    tdCategory.append(getCategoryImage(note.category));
 
     const tdNoteContent = document.createElement("td");
     tdNoteContent.innerText = note.content;
@@ -183,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdEdit = document.createElement("td");
 
     const imgEdit = document.createElement("img");
+    imgEdit.classList.add("edit");
     const divWrapperEdit = document.createElement("div");
     divWrapperEdit.classList.add("staticCell");
     imgEdit.src = "./public/images/icons8-edit-24.png";
@@ -233,6 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   notesList.addEventListener("click", (e) => {
     const noteId = e.target.closest("tr").dataset.id;
+    const note = data.find((item) => item.id === noteId);
 
     if (e.target.matches(".delete")) {
       data = deleteNote(noteId);
@@ -252,7 +259,48 @@ document.addEventListener("DOMContentLoaded", () => {
       e.target.closest("tr").remove();
       drawNotesAmount();
     }
+
+    if (e.target.matches(".edit")) {
+      //show edit form    noteEditForm.computedStyleMap.display = 'flex';
+
+      noteEditTitleInput.value = note.title;
+      noteEditTextarea.value = note.content;
+      categoriesEditSelect.value = note.category;
+      noteEditIdInput.value = noteId;
+    }
   });
+
+  noteEditForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const noteId = noteEditIdInput.value;
+    data = data.map((note) => {
+      if (note.id === noteId) {
+        return {
+          ...note,
+          title: noteEditTitleInput.value,
+          content: noteEditTextarea.value,
+          category: categoriesEditSelect.value,
+          dates: noteEditTextarea.value.match(REGEXDATE),
+        };
+      }
+      return note;
+    });
+    updateNote(data.find((note) => note.id === noteId));
+    noteEditForm.style.display = "none";
+  });
+
+  const updateNote = (note) => {
+    const tr = document.querySelector(`[data-id="${note.id}"]`);
+    console.log(tr);
+    const [img, title, , category, content, dates] = tr.querySelectorAll("td");
+    title.innerText = note.title;
+    category.innerText = note.category;
+    content.innerText = note.content;
+    const image = img.querySelector("img");
+    img.removeChild(image);
+    img.append(getCategoryImage(note.category));
+    dates.innerText = note.dates;
+  };
 
   const deleteNote = (id) => {
     const filteredData = data.filter((note) => note.id !== id);
@@ -300,38 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdCategoryText = document.createElement("td");
     tdCategoryText.innerText = note.category;
 
-    switch (note.category) {
-      case "Task":
-        const imgTask = document.createElement("img");
-        imgTask.src = "./public/images/icons8-cart-30.png";
-        imgTask.alt = "task";
-        tdCategory.append(imgTask);
-        break;
-      case "Random Thought":
-        const imgThought = document.createElement("img");
-        imgThought.src = "./public/images/icons8-mind-30.png";
-        imgThought.alt = "random thought";
-        tdCategory.append(imgThought);
-        break;
-      case "Idea":
-        const imgIdea = document.createElement("img");
-        imgIdea.src = "./public/images/icons8-light-on-30.png";
-        imgIdea.alt = "idea";
-        tdCategory.append(imgIdea);
-        break;
-      case "Quote":
-        const imgQuote = document.createElement("img");
-        imgQuote.src = "./public/images/icons8-get-quote-30.png";
-        imgQuote.alt = "quote";
-        tdCategory.append(imgQuote);
-        break;
-      default:
-        const imgDefault = document.createElement("img");
-        imgDefault.src = "./public/images/icons8-cart-30.png";
-        imgDefault.alt = "quote";
-        tdCategory.append(imgDefault);
-        break;
-    }
+    tdCategory.append(getCategoryImage(note.category));
 
     const tdNoteContent = document.createElement("td");
     tdNoteContent.innerText = note.content;
@@ -342,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdEdit = document.createElement("td");
 
     const imgEdit = document.createElement("img");
+    imgEdit.classList.add("edit");
     const divWrapperEdit = document.createElement("div");
     divWrapperEdit.classList.add("staticCell");
     imgEdit.src = "./public/images/icons8-edit-24.png";
