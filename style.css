@@ -27,8 +27,14 @@ body {
   padding: 10px;
 }
 
+.button-wrapper {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
 .button {
-  float: right;
   cursor: pointer;
   border-radius: 4px;
   width: fit-content;
