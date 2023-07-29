@@ -119,9 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.querySelector("#create-note-btn");
   const noteCreatingForm = document.querySelector("#note-creating-form");
   const notesList = document.querySelector("#notes-list");
-  const noteTitleInput = document.querySelector("#name");
-  const categoriesSelect = document.querySelector("#categories");
-  const noteTextarea = document.querySelector("#note-content");
+
   const archivedNotesList = document.querySelector(".archived-notes");
   const activeTaskNotes = document.querySelector(".active-task-notes");
   const archivedTaskNotes = document.querySelector(".archived-task-notes");
@@ -135,12 +133,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const archivedIdeaNotes = document.querySelector(".archived-idea-notes");
   const activeQuoteNotes = document.querySelector(".active-quote-notes");
   const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
-  //edit-form
+
   const noteEditForm = document.querySelector("#note-edit-form");
-  const noteEditTitleInput = document.querySelector("#form-edit__title");
-  const categoriesEditSelect = document.querySelector("#form-edit__categories");
-  const noteEditTextarea = document.querySelector("#note-edit-content");
-  const noteEditIdInput = document.querySelector("#hidden");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -148,12 +142,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   noteCreatingForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    const { title, content, category } = noteCreatingForm.elements;
     const note = {};
-    note.title = noteTitleInput.value;
-    note.content = noteTextarea.value;
-    note.category = categoriesSelect.value;
+    note.title = title.value;
+    note.content = content.value;
+    note.category = category.value;
     note.created = createDate();
-    note.dates = noteTextarea.value.match(REGEXDATE) || "";
+    note.dates = content.value.match(REGEXDATE) || "";
     note.id = nanoid();
     note.active = true;
     data.push(note);
@@ -261,26 +256,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (e.target.matches(".edit")) {
+      const { title, category, content, noteId } = noteEditForm.elements;
       noteEditForm.style.display = "flex";
 
-      noteEditTitleInput.value = note.title;
-      noteEditTextarea.value = note.content;
-      categoriesEditSelect.value = note.category;
-      noteEditIdInput.value = noteId;
+      title.value = note.title;
+      content.value = note.content;
+      category.value = note.category;
+      noteId.value = noteId;
     }
   });
 
   noteEditForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const noteId = noteEditIdInput.value;
+    const { title, content, category, noteId } = noteEditForm.elements;
     data = data.map((note) => {
-      if (note.id === noteId) {
+      if (note.id === noteId.value) {
         return {
           ...note,
-          title: noteEditTitleInput.value,
-          content: noteEditTextarea.value,
-          category: categoriesEditSelect.value,
-          dates: noteEditTextarea.value.match(REGEXDATE),
+          title: title.value,
+          content: content.value,
+          category: category.value,
+          dates: content.value.match(REGEXDATE),
         };
       }
       return note;
