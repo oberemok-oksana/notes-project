@@ -45,7 +45,7 @@ let data = [
     content: "Implement new",
     dates: "03/05/2021, 05/05/2021",
     id: "3",
-    active: true,
+    active: false,
   },
   {
     title: "William Gaddis",
@@ -67,6 +67,16 @@ let data = [
   },
 ];
 
+const getActiveNotes = () => {
+  const filtered = data.filter((note) => note.active);
+  return filtered;
+};
+
+const getArchivedNotes = () => {
+  const filtered = data.filter((note) => !note.active);
+  return filtered;
+};
+
 const createDate = () => {
   const date = new Date();
   const day = date.getDate();
@@ -82,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteTitleInput = document.querySelector("#name");
   const categoriesSelect = document.querySelector("#categories");
   const noteTextarea = document.querySelector("#note-content");
-  const archive = document.querySelector(".archive");
+  const archivedNotesList = document.querySelector(".archived-notes");
   const activeTaskNotes = document.querySelector(".active-task-notes");
   const archivedTaskNotes = document.querySelector(".archived-task-notes");
   const activeThoughtsNotes = document.querySelector(
@@ -217,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     noteCreatingForm.reset();
   };
 
-  data.map((note) => {
+  getActiveNotes().map((note) => {
     createNote(note);
   });
 
@@ -237,7 +247,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return note;
       });
-
+      const archivedNote = data.find((note) => note.id === noteId);
+      createArchiveNote(archivedNote);
       e.target.closest("tr").remove();
       drawNotesAmount();
     }
@@ -272,4 +283,105 @@ document.addEventListener("DOMContentLoaded", () => {
     archivedQuoteNotes.innerText = quotes.length - activeQuoteNotesAmount;
   };
   drawNotesAmount();
+
+  const createArchiveNote = (note) => {
+    const trNote = document.createElement("tr");
+    trNote.classList.add("table-data");
+    trNote.dataset.id = note.id;
+    const tdCategory = document.createElement("td");
+    tdCategory.classList.add("category");
+
+    const tdTitle = document.createElement("td");
+    tdTitle.innerText = note.title || "";
+
+    const tdCreatedDate = document.createElement("td");
+    tdCreatedDate.innerText = createDate();
+
+    const tdCategoryText = document.createElement("td");
+    tdCategoryText.innerText = note.category;
+
+    switch (note.category) {
+      case "Task":
+        const imgTask = document.createElement("img");
+        imgTask.src = "./public/images/icons8-cart-30.png";
+        imgTask.alt = "task";
+        tdCategory.append(imgTask);
+        break;
+      case "Random Thought":
+        const imgThought = document.createElement("img");
+        imgThought.src = "./public/images/icons8-mind-30.png";
+        imgThought.alt = "random thought";
+        tdCategory.append(imgThought);
+        break;
+      case "Idea":
+        const imgIdea = document.createElement("img");
+        imgIdea.src = "./public/images/icons8-light-on-30.png";
+        imgIdea.alt = "idea";
+        tdCategory.append(imgIdea);
+        break;
+      case "Quote":
+        const imgQuote = document.createElement("img");
+        imgQuote.src = "./public/images/icons8-get-quote-30.png";
+        imgQuote.alt = "quote";
+        tdCategory.append(imgQuote);
+        break;
+      default:
+        const imgDefault = document.createElement("img");
+        imgDefault.src = "./public/images/icons8-cart-30.png";
+        imgDefault.alt = "quote";
+        tdCategory.append(imgDefault);
+        break;
+    }
+
+    const tdNoteContent = document.createElement("td");
+    tdNoteContent.innerText = note.content;
+
+    const tdDates = document.createElement("td");
+    tdDates.innerText = note.dates;
+
+    const tdEdit = document.createElement("td");
+
+    const imgEdit = document.createElement("img");
+    const divWrapperEdit = document.createElement("div");
+    divWrapperEdit.classList.add("staticCell");
+    imgEdit.src = "./public/images/icons8-edit-24.png";
+    imgEdit.alt = "edit";
+    divWrapperEdit.append(imgEdit);
+    tdEdit.append(divWrapperEdit);
+
+    const tdArchive = document.createElement("td");
+
+    const imgArchive = document.createElement("img");
+    const divWrapperArchive = document.createElement("div");
+    divWrapperArchive.classList.add("staticCell");
+    imgArchive.src = "./public/images/icons8-download-24.png";
+    imgArchive.alt = "archive";
+    imgArchive.classList.add("archive");
+    divWrapperArchive.append(imgArchive);
+    tdArchive.append(divWrapperArchive);
+
+    const tdDelete = document.createElement("td");
+    const divWrapper = document.createElement("div");
+    divWrapper.classList.add("staticCell");
+    const imgDelete = document.createElement("img");
+    imgDelete.classList.add("delete");
+    imgDelete.src = "./public/images/icons8-delete-24.png";
+    imgDelete.alt = "delete";
+    divWrapper.append(imgDelete);
+    tdDelete.append(divWrapper);
+
+    trNote.append(
+      tdCategory,
+      tdTitle,
+      tdCreatedDate,
+      tdCategoryText,
+      tdNoteContent,
+      tdDates,
+      tdEdit,
+      tdArchive,
+      tdDelete
+    );
+    archivedNotesList.append(trNote);
+  };
+  getArchivedNotes().map((note) => createArchiveNote(note));
 });
