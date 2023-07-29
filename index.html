@@ -31,7 +31,7 @@
       <div class="button-wrapper">
         <button class="button" id="create-note-btn">Create Note</button>
       </div>
-      <form class="card" id="note-creating-form">
+      <form class="card" id="note-creating-form" style="display: none">
         <input class="input" type="text" id="name" placeholder="Note title" />
         <div class="wrapper">
           <label for="categories">Choose a note category:</label>
@@ -55,6 +55,7 @@
         <button type="submit" class="button" id="save-note-btn">Save</button>
       </form>
       <form class="card" id="note-edit-form">
+        <input type="hidden" name="note-id" id="hidden" />
         <input
           class="input"
           type="text"
@@ -75,12 +76,14 @@
         <textarea
           class="input"
           name="note"
-          id="note-content"
+          id="note-edit-content"
           cols="30"
           rows="10"
         ></textarea>
 
-        <button type="submit" class="button" id="save-note-btn">Save</button>
+        <button type="submit" class="button" id="save-edit-note-btn">
+          Save
+        </button>
       </form>
 
       <div>
