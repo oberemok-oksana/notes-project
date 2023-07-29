@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
 
   const noteEditForm = document.querySelector("#note-edit-form");
+  const activeNoteTemplate = document.querySelector("#active-note");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -157,72 +158,23 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const createNote = (note) => {
-    const trNote = document.createElement("tr");
-    trNote.classList.add("table-data");
+    const trNote = activeNoteTemplate.content
+      .cloneNode(true)
+      .querySelector("tr");
+
     trNote.dataset.id = note.id;
-    const tdCategory = document.createElement("td");
-    tdCategory.classList.add("category");
 
-    const tdTitle = document.createElement("td");
-    tdTitle.innerText = note.title || "";
+    const [category, title, created, categoryText, content, dates] =
+      trNote.querySelectorAll("td");
+    title.innerText = note.title || "";
+    created.innerText = createDate();
+    categoryText.innerText = note.category;
 
-    const tdCreatedDate = document.createElement("td");
-    tdCreatedDate.innerText = createDate();
+    category.append(getCategoryImage(note.category));
 
-    const tdCategoryText = document.createElement("td");
-    tdCategoryText.innerText = note.category;
+    content.innerText = note.content;
+    dates.innerText = note.dates;
 
-    tdCategory.append(getCategoryImage(note.category));
-
-    const tdNoteContent = document.createElement("td");
-    tdNoteContent.innerText = note.content;
-
-    const tdDates = document.createElement("td");
-    tdDates.innerText = note.dates;
-
-    const tdEdit = document.createElement("td");
-
-    const imgEdit = document.createElement("img");
-    imgEdit.classList.add("edit");
-    const divWrapperEdit = document.createElement("div");
-    divWrapperEdit.classList.add("staticCell");
-    imgEdit.src = "./public/images/icons8-edit-24.png";
-    imgEdit.alt = "edit";
-    divWrapperEdit.append(imgEdit);
-    tdEdit.append(divWrapperEdit);
-
-    const tdArchive = document.createElement("td");
-
-    const imgArchive = document.createElement("img");
-    const divWrapperArchive = document.createElement("div");
-    divWrapperArchive.classList.add("staticCell");
-    imgArchive.src = "./public/images/icons8-download-24.png";
-    imgArchive.alt = "archive";
-    imgArchive.classList.add("archive");
-    divWrapperArchive.append(imgArchive);
-    tdArchive.append(divWrapperArchive);
-
-    const tdDelete = document.createElement("td");
-    const divWrapper = document.createElement("div");
-    divWrapper.classList.add("staticCell");
-    const imgDelete = document.createElement("img");
-    imgDelete.classList.add("delete");
-    imgDelete.src = "./public/images/icons8-delete-24.png";
-    imgDelete.alt = "delete";
-    divWrapper.append(imgDelete);
-    tdDelete.append(divWrapper);
-
-    trNote.append(
-      tdCategory,
-      tdTitle,
-      tdCreatedDate,
-      tdCategoryText,
-      tdNoteContent,
-      tdDates,
-      tdEdit,
-      tdArchive,
-      tdDelete
-    );
     notesList.append(trNote);
 
     noteCreatingForm.reset();
