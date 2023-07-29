@@ -83,8 +83,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoriesSelect = document.querySelector("#categories");
   const noteTextarea = document.querySelector("#note-content");
   const archive = document.querySelector(".archive");
-  const activeNotes = document.querySelector(".active-notes");
-  const archivedNotes = document.querySelector(".archived-notes");
+  const activeTaskNotes = document.querySelector(".active-task-notes");
+  const archivedTaskNotes = document.querySelector(".archived-task-notes");
+  const activeThoughtsNotes = document.querySelector(
+    ".active-random-thought-notes"
+  );
+  const archivedThoughtsNotes = document.querySelector(
+    ".archived-random-thought-notes"
+  );
+  const activeIdeaNotes = document.querySelector(".active-idea-notes");
+  const archivedIdeaNotes = document.querySelector(".archived-idea-notes");
+  const activeQuoteNotes = document.querySelector(".active-quote-notes");
+  const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -100,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
     note.dates = noteTextarea.value.match(REGEXDATE) || "";
     note.id = nanoid();
     note.active = true;
-    console.log(noteTextarea.value, noteTextarea.value.match(REGEXDATE));
     data.push(note);
     createNote(note);
     drawNotesAmount();
@@ -239,9 +248,28 @@ document.addEventListener("DOMContentLoaded", () => {
     return filteredData;
   };
   const drawNotesAmount = () => {
-    const activeNotesAmount = data.filter((note) => note.active);
-    activeNotes.innerText = activeNotesAmount.length;
-    archivedNotes.innerText = data.length - activeNotesAmount.length;
+    const tasks = data.filter((note) => note.category === "Task");
+    const activeTaskNotesAmount = tasks.filter((note) => note.active).length;
+    activeTaskNotes.innerText = activeTaskNotesAmount;
+    archivedTaskNotes.innerText = tasks.length - activeTaskNotesAmount;
+
+    const thoughts = data.filter((note) => note.category === "Random Thought");
+    const activeThoughtsNotesAmount = thoughts.filter(
+      (note) => note.active
+    ).length;
+    activeThoughtsNotes.innerText = activeThoughtsNotesAmount;
+    archivedThoughtsNotes.innerText =
+      thoughts.length - activeThoughtsNotesAmount;
+
+    const ideas = data.filter((note) => note.category === "Idea");
+    const activeIdeaNotesAmount = ideas.filter((note) => note.active).length;
+    activeIdeaNotes.innerText = activeIdeaNotesAmount;
+    archivedIdeaNotes.innerText = ideas.length - activeIdeaNotesAmount;
+
+    const quotes = data.filter((note) => note.category === "Quote");
+    const activeQuoteNotesAmount = quotes.filter((note) => note.active).length;
+    activeQuoteNotes.innerText = activeQuoteNotesAmount;
+    archivedQuoteNotes.innerText = quotes.length - activeQuoteNotesAmount;
   };
   drawNotesAmount();
 });
