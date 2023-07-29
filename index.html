@@ -7,6 +7,43 @@
     <title>My notes</title>
   </head>
   <body>
+    <template id="active-note">
+      <tr class="table-data" data-id="5">
+        <td class="category"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="staticCell">
+            <img
+              class="edit"
+              src="./public/images/icons8-edit-24.png"
+              alt="edit"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="staticCell">
+            <img
+              src="./public/images/icons8-download-24.png"
+              alt="archive"
+              class="archive"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="staticCell">
+            <img
+              class="delete"
+              src="./public/images/icons8-delete-24.png"
+              alt="delete"
+            />
+          </div>
+        </td>
+      </tr>
+    </template>
     <main>
       <table class="table">
         <thead>
@@ -31,7 +68,7 @@
       <div class="button-wrapper">
         <button class="button" id="create-note-btn">Create Note</button>
       </div>
-      <form class="card" id="note-creating-form" style="display: none">
+      <form class="card" id="note-creating-form">
         <input class="input" type="text" id="name" placeholder="Note title" />
         <div class="wrapper">
           <label for="categories">Choose a note category:</label>
@@ -55,7 +92,7 @@
         <button type="submit" class="button" id="save-note-btn">Save</button>
       </form>
       <form class="card" id="note-edit-form">
-        <input type="hidden" name="note-id" id="hidden" />
+        <input type="hidden" name="noteId" id="hidden" />
         <input
           class="input"
           type="text"
