@@ -42,7 +42,7 @@ let data = [
     title: "New Feature",
     created: "May 05, 2021",
     category: "Idea",
-    content: "Implement new",
+    content: "Implement new 03/05/2021,to 05/05/2021",
     dates: "03/05/2021, 05/05/2021",
     id: "3",
     active: false,
@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (e.target.matches(".edit")) {
-      //show edit form    noteEditForm.computedStyleMap.display = 'flex';
+      noteEditForm.style.display = "flex";
 
       noteEditTitleInput.value = note.title;
       noteEditTextarea.value = note.content;
@@ -356,17 +356,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const tdDates = document.createElement("td");
     tdDates.innerText = note.dates;
 
-    const tdEdit = document.createElement("td");
-
-    const imgEdit = document.createElement("img");
-    imgEdit.classList.add("edit");
-    const divWrapperEdit = document.createElement("div");
-    divWrapperEdit.classList.add("staticCell");
-    imgEdit.src = "./public/images/icons8-edit-24.png";
-    imgEdit.alt = "edit";
-    divWrapperEdit.append(imgEdit);
-    tdEdit.append(divWrapperEdit);
-
     const tdArchive = document.createElement("td");
 
     const imgArchive = document.createElement("img");
@@ -378,16 +367,6 @@ document.addEventListener("DOMContentLoaded", () => {
     divWrapperArchive.append(imgArchive);
     tdArchive.append(divWrapperArchive);
 
-    const tdDelete = document.createElement("td");
-    const divWrapper = document.createElement("div");
-    divWrapper.classList.add("staticCell");
-    const imgDelete = document.createElement("img");
-    imgDelete.classList.add("delete");
-    imgDelete.src = "./public/images/icons8-delete-24.png";
-    imgDelete.alt = "delete";
-    divWrapper.append(imgDelete);
-    tdDelete.append(divWrapper);
-
     trNote.append(
       tdCategory,
       tdTitle,
@@ -395,9 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
       tdCategoryText,
       tdNoteContent,
       tdDates,
-      tdEdit,
-      tdArchive,
-      tdDelete
+      tdArchive
     );
     archivedNotesList.append(trNote);
   };
