@@ -384,4 +384,21 @@ document.addEventListener("DOMContentLoaded", () => {
     archivedNotesList.append(trNote);
   };
   getArchivedNotes().map((note) => createArchiveNote(note));
+
+  archivedNotesList.addEventListener("click", (e) => {
+    const noteId = e.target.closest("tr").dataset.id;
+    const note = data.find((note) => note.id === noteId);
+
+    if (e.target.matches(".archive")) {
+      data = data.map((note) => {
+        if (note.id === noteId) {
+          return { ...note, active: true };
+        }
+        return note;
+      });
+      drawNotesAmount();
+      createNote(note);
+      e.target.closest("tr").remove();
+    }
+  });
 });
