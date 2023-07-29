@@ -38,7 +38,7 @@
             <option value="Task">Task</option>
             <option value="Random Thought">Random Thought</option>
             <option value="Idea">Idea</option>
-            <option value="Quotes">Quotes</option>
+            <option value="Quote">Quote</option>
           </select>
         </div>
 
@@ -56,6 +56,7 @@
         <table class="table">
           <thead class="table-head">
             <tr>
+              <th></th>
               <th>Note Category</th>
               <th>Active</th>
               <th>Archived</th>
@@ -63,9 +64,42 @@
           </thead>
           <tbody class="archive">
             <tr class="table-data">
-              <td>Image Task</td>
-              <td class="active-notes">13</td>
-              <td class="archived-notes">7</td>
+              <td class="category">
+                <img src="./public//images/icons8-cart-30.png" alt="cart" />
+              </td>
+              <td>Task</td>
+              <td class="active-task-notes">0</td>
+              <td class="archived-task-notes">0</td>
+            </tr>
+            <tr class="table-data">
+              <td class="category">
+                <img
+                  src="./public//images/icons8-mind-30.png"
+                  alt="random thought"
+                />
+              </td>
+              <td>Random Thought</td>
+              <td class="active-random-thought-notes">0</td>
+              <td class="archived-random-thought-notes">0</td>
+            </tr>
+            <tr class="table-data">
+              <td class="category">
+                <img src="./public//images/icons8-light-on-30.png" alt="idea" />
+              </td>
+              <td>Idea</td>
+              <td class="active-idea-notes">0</td>
+              <td class="archived-idea-notes">0</td>
+            </tr>
+            <tr class="table-data">
+              <td class="category">
+                <img
+                  src="./public//images/icons8-get-quote-30.png"
+                  alt="quote"
+                />
+              </td>
+              <td>Quote</td>
+              <td class="active-quote-notes">0</td>
+              <td class="archived-quote-notes">0</td>
             </tr>
           </tbody>
         </table>
