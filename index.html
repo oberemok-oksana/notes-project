@@ -44,6 +44,25 @@
         </td>
       </tr>
     </template>
+    <template id="archived-note">
+      <tr class="table-data" data-id="3">
+        <td class="category"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="staticCell">
+            <img
+              src="./public/images/icons8-download-24.png"
+              alt="archive"
+              class="archive"
+            />
+          </div>
+        </td>
+      </tr>
+    </template>
     <main>
       <table class="table">
         <thead>
@@ -69,7 +88,13 @@
         <button class="button" id="create-note-btn">Create Note</button>
       </div>
       <form class="card" id="note-creating-form">
-        <input class="input" type="text" id="name" placeholder="Note title" />
+        <input
+          class="input"
+          name="title"
+          type="text"
+          id="name"
+          placeholder="Note title"
+        />
         <div class="wrapper">
           <label for="categories">Choose a note category:</label>
           <select class="select" name="categories" id="categories">
@@ -83,7 +108,7 @@
 
         <textarea
           class="input"
-          name="note"
+          name="content"
           id="note-content"
           cols="30"
           rows="10"
@@ -94,6 +119,7 @@
       <form class="card" id="note-edit-form">
         <input type="hidden" name="noteId" id="hidden" />
         <input
+          name="title"
           class="input"
           type="text"
           id="form-edit__title"
@@ -101,7 +127,7 @@
         />
         <div class="wrapper">
           <label for="categories">Choose a note category:</label>
-          <select class="select" name="categories" id="form-edit__categories">
+          <select class="select" name="category" id="form-edit__categories">
             <option value="Default">Choose something</option>
             <option value="Task">Task</option>
             <option value="Random Thought">Random Thought</option>
@@ -112,7 +138,7 @@
 
         <textarea
           class="input"
-          name="note"
+          name="content"
           id="note-edit-content"
           cols="30"
           rows="10"
