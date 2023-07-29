@@ -26,7 +26,7 @@ let data = [
     category: "Task",
     dates: "",
     content: "Tomatoes, bread",
-    id: 1,
+    id: "1",
     active: true,
   },
   {
@@ -35,7 +35,7 @@ let data = [
     category: "Random Thought",
     dates: "",
     content: "The evolution",
-    id: 2,
+    id: "2",
     active: true,
   },
   {
@@ -44,7 +44,7 @@ let data = [
     category: "Idea",
     content: "Implement new",
     dates: "03/05/2021, 05/05/2021",
-    id: 3,
+    id: "3",
     active: true,
   },
   {
@@ -53,7 +53,7 @@ let data = [
     category: "Quote",
     content: "Power doesn't co..",
     dates: "",
-    id: 4,
+    id: "4",
     active: true,
   },
   {
@@ -62,7 +62,7 @@ let data = [
     category: "Task",
     content: "The Lean Startup",
     dates: "",
-    id: 5,
+    id: "5",
     active: true,
   },
 ];
@@ -82,8 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const noteTitleInput = document.querySelector("#name");
   const categoriesSelect = document.querySelector("#categories");
   const noteTextarea = document.querySelector("#note-content");
-  const noteDates = document.querySelector(".dates");
   const archive = document.querySelector(".archive");
+  const activeNotes = document.querySelector(".active-notes");
+  const archivedNotes = document.querySelector(".archived-notes");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -102,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(noteTextarea.value, noteTextarea.value.match(REGEXDATE));
     data.push(note);
     createNote(note);
+    drawNotesAmount();
   });
 
   const createNote = (note) => {
@@ -176,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
     divWrapperArchive.classList.add("staticCell");
     imgArchive.src = "./public/images/icons8-download-24.png";
     imgArchive.alt = "archive";
+    imgArchive.classList.add("archive");
     divWrapperArchive.append(imgArchive);
     tdArchive.append(divWrapperArchive);
 
@@ -215,6 +218,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target.matches(".delete")) {
       data = deleteNote(noteId);
       e.target.closest("tr").remove();
+      drawNotesAmount();
+    }
+
+    if (e.target.matches(".archive")) {
+      data = data.map((note) => {
+        if (note.id === noteId) {
+          return { ...note, active: false };
+        }
+        return note;
+      });
+
+      e.target.closest("tr").remove();
+      drawNotesAmount();
     }
   });
 
@@ -222,4 +238,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const filteredData = data.filter((note) => note.id !== id);
     return filteredData;
   };
+  const drawNotesAmount = () => {
+    const activeNotesAmount = data.filter((note) => note.active);
+    activeNotes.innerText = activeNotesAmount.length;
+    archivedNotes.innerText = data.length - activeNotesAmount.length;
+  };
+  drawNotesAmount();
 });
