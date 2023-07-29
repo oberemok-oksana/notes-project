@@ -136,6 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const noteEditForm = document.querySelector("#note-edit-form");
   const activeNoteTemplate = document.querySelector("#active-note");
+  const archivedNoteTemplate = document.querySelector("#archived-note");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -214,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title.value = note.title;
       content.value = note.content;
       category.value = note.category;
-      noteId.value = noteId;
+      noteId.value = note.id;
     }
   });
 
@@ -233,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return note;
     });
-    updateNote(data.find((note) => note.id === noteId));
+    updateNote(data.find((note) => note.id === noteId.value));
     noteEditForm.style.display = "none";
   });
 
@@ -281,49 +282,21 @@ document.addEventListener("DOMContentLoaded", () => {
   drawNotesAmount();
 
   const createArchiveNote = (note) => {
-    const trNote = document.createElement("tr");
-    trNote.classList.add("table-data");
+    const trNote = archivedNoteTemplate.content
+      .cloneNode(true)
+      .querySelector("tr");
+    const [category, title, created, categoryText, content, dates] =
+      trNote.querySelectorAll("td");
+
     trNote.dataset.id = note.id;
-    const tdCategory = document.createElement("td");
-    tdCategory.classList.add("category");
 
-    const tdTitle = document.createElement("td");
-    tdTitle.innerText = note.title || "";
+    title.innerText = note.title || "";
+    created.innerText = note.created;
+    categoryText.innerText = note.category;
+    category.append(getCategoryImage(note.category));
+    content.innerText = note.content;
+    dates.innerText = note.dates;
 
-    const tdCreatedDate = document.createElement("td");
-    tdCreatedDate.innerText = createDate();
-
-    const tdCategoryText = document.createElement("td");
-    tdCategoryText.innerText = note.category;
-
-    tdCategory.append(getCategoryImage(note.category));
-
-    const tdNoteContent = document.createElement("td");
-    tdNoteContent.innerText = note.content;
-
-    const tdDates = document.createElement("td");
-    tdDates.innerText = note.dates;
-
-    const tdArchive = document.createElement("td");
-
-    const imgArchive = document.createElement("img");
-    const divWrapperArchive = document.createElement("div");
-    divWrapperArchive.classList.add("staticCell");
-    imgArchive.src = "./public/images/icons8-download-24.png";
-    imgArchive.alt = "archive";
-    imgArchive.classList.add("archive");
-    divWrapperArchive.append(imgArchive);
-    tdArchive.append(divWrapperArchive);
-
-    trNote.append(
-      tdCategory,
-      tdTitle,
-      tdCreatedDate,
-      tdCategoryText,
-      tdNoteContent,
-      tdDates,
-      tdArchive
-    );
     archivedNotesList.append(trNote);
   };
   getArchivedNotes().map((note) => createArchiveNote(note));
