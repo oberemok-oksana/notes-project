@@ -20,3 +20,13 @@ export const createDate = () => {
   const year = date.getFullYear();
   return `${MONTHS[month]} ${day}, ${year}`;
 };
+
+export const getActiveNotes = (data) => {
+  const filtered = data.filter((note) => note.active);
+  return filtered;
+};
+
+export const getArchivedNotes = (data) => {
+  const filtered = data.filter((note) => !note.active);
+  return filtered;
+};
