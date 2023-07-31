@@ -94,11 +94,12 @@
           type="text"
           id="name"
           placeholder="Note title"
+          required
         />
         <div class="wrapper">
           <label for="categories">Choose a note category:</label>
-          <select class="select" name="category" id="categories">
-            <option value="Default">Choose something</option>
+          <select class="select" name="category" id="categories" required>
+            <option value="">Choose something</option>
             <option value="Task">Task</option>
             <option value="Random Thought">Random Thought</option>
             <option value="Idea">Idea</option>
@@ -112,6 +113,7 @@
           id="note-content"
           cols="30"
           rows="10"
+          required
         ></textarea>
 
         <button type="submit" class="button" id="save-note-btn">Save</button>
@@ -124,11 +126,17 @@
           type="text"
           id="form-edit__title"
           placeholder="Note title"
+          required
         />
         <div class="wrapper">
           <label for="categories">Choose a note category:</label>
-          <select class="select" name="category" id="form-edit__categories">
-            <option value="Default">Choose something</option>
+          <select
+            class="select"
+            name="category"
+            id="form-edit__categories"
+            required
+          >
+            <option value="">Choose something</option>
             <option value="Task">Task</option>
             <option value="Random Thought">Random Thought</option>
             <option value="Idea">Idea</option>
@@ -142,6 +150,7 @@
           id="note-edit-content"
           cols="30"
           rows="10"
+          required
         ></textarea>
 
         <button type="submit" class="button" id="save-edit-note-btn">
