@@ -1,5 +1,10 @@
 import { createArchivedNote, createNote, updateNote } from "./src/dom";
-import { getActiveNotes, getArchivedNotes } from "./src/lib";
+import {
+  createDate,
+  deleteNote,
+  getActiveNotes,
+  getArchivedNotes,
+} from "./src/lib";
 import "./style.css";
 import { nanoid } from "nanoid";
 
@@ -91,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     note.id = nanoid();
     note.active = true;
     data.push(note);
-    createNote(note, noteList, noteCreatingForm);
+    createNote(note, notesList, noteCreatingForm);
     drawNotesAmount();
   });
 
@@ -99,37 +104,49 @@ document.addEventListener("DOMContentLoaded", () => {
     createNote(note, notesList, noteCreatingForm);
   });
 
+  const handleDelete = (e, id) => {
+    data = deleteNote(data, id);
+    e.target.closest("tr").remove();
+    drawNotesAmount();
+  };
+
+  const handleEdit = () => {
+    const { title, category, content, noteId } = noteEditForm.elements;
+    noteEditForm.style.display = "flex";
+
+    title.value = note.title;
+    content.value = note.content;
+    category.value = note.category;
+    noteId.value = note.id;
+  };
+
+  const handleArchive = (e, id) => {
+    data = data.map((note) => {
+      if (note.id === id) {
+        return { ...note, active: false };
+      }
+      return note;
+    });
+    const archivedNote = data.find((note) => note.id === id);
+    createArchivedNote(archivedNote, archivedNotesList);
+    e.target.closest("tr").remove();
+    drawNotesAmount();
+  };
+
   notesList.addEventListener("click", (e) => {
     const noteId = e.target.closest("tr").dataset.id;
     const note = data.find((item) => item.id === noteId);
 
     if (e.target.matches(".delete")) {
-      data = deleteNote(noteId);
-      e.target.closest("tr").remove();
-      drawNotesAmount();
+      handleDelete(e, noteId);
     }
 
     if (e.target.matches(".archive")) {
-      data = data.map((note) => {
-        if (note.id === noteId) {
-          return { ...note, active: false };
-        }
-        return note;
-      });
-      const archivedNote = data.find((note) => note.id === noteId);
-      createArchivedNote(archivedNote, archivedNotesList);
-      e.target.closest("tr").remove();
-      drawNotesAmount();
+      handleArchive(e, noteId);
     }
 
     if (e.target.matches(".edit")) {
-      const { title, category, content, noteId } = noteEditForm.elements;
-      noteEditForm.style.display = "flex";
-
-      title.value = note.title;
-      content.value = note.content;
-      category.value = note.category;
-      noteId.value = note.id;
+      handleEdit();
     }
   });
 
@@ -151,11 +168,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateNote(data.find((note) => note.id === noteId.value));
     noteEditForm.style.display = "none";
   });
-
-  const deleteNote = (id) => {
-    const filteredData = data.filter((note) => note.id !== id);
-    return filteredData;
-  };
 
   const drawNotesAmount = () => {
     const tasks = data.filter((note) => note.category === "Task");
