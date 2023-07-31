@@ -5,7 +5,7 @@ body {
 .table {
   width: 100%;
   margin-bottom: 15px;
-  /* border-collapse: collapse; */
+  border-collapse: collapse;
 }
 
 .table-head {
@@ -21,6 +21,9 @@ body {
 .table-data {
   background-color: #e8eaf5;
   border-spacing: 5px;
+  border-top: 7px solid #fff;
+  margin: 10px 0;
+  border-bottom: 7px solid #fff;
 }
 
 .table-data td {
@@ -59,6 +62,7 @@ body {
   width: fit-content;
   height: fit-content;
   padding: 10px;
+  margin: 5px 0;
   border-radius: 50%;
 }
 
