@@ -1,15 +1,22 @@
-import { createArchivedNote, createNote, updateNote } from "./src/dom";
 import {
+  createArchivedNote,
+  createNote,
+  hideForm,
+  removeClosestTr,
+  showForm,
+  updateNote,
+} from "./src/dom";
+import {
+  checkForDates,
   createDate,
   deleteNote,
+  findNoteById,
   getActiveNotes,
   getArchivedNotes,
+  getNotesByCategory,
 } from "./src/lib";
 import "./style.css";
 import { nanoid } from "nanoid";
-
-const REGEXDATE =
-  /(?:^|\D)(?:(?:0?[1-9]|[12][0-9]|3[01])\/(?:0?[1-9]|1[0-2])\/(?:\d{4}))(?:\D|$)/gm;
 
 let data = [
   {
@@ -65,54 +72,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const notesList = document.querySelector("#notes-list");
 
   const archivedNotesList = document.querySelector(".archived-notes");
-  const activeTaskNotes = document.querySelector(".active-task-notes");
-  const archivedTaskNotes = document.querySelector(".archived-task-notes");
-  const activeThoughtsNotes = document.querySelector(
-    ".active-random-thought-notes"
-  );
-  const archivedThoughtsNotes = document.querySelector(
-    ".archived-random-thought-notes"
-  );
-  const activeIdeaNotes = document.querySelector(".active-idea-notes");
-  const archivedIdeaNotes = document.querySelector(".archived-idea-notes");
-  const activeQuoteNotes = document.querySelector(".active-quote-notes");
-  const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
-
   const noteEditForm = document.querySelector("#note-edit-form");
 
-  createNoteBtn.addEventListener("click", () => {
-    noteCreatingForm.classList.toggle("visible");
-  });
-
-  noteCreatingForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const { title, content, category } = noteCreatingForm.elements;
-    const note = {};
-    note.title = title.value;
-    note.content = content.value;
-    note.category = category.value;
-    note.created = createDate();
-    note.dates = content.value.match(REGEXDATE) || "";
-    note.id = nanoid();
-    note.active = true;
-    data.push(note);
-    createNote(note, notesList, noteCreatingForm);
-    drawNotesAmount();
-  });
-
   getActiveNotes(data).map((note) => {
-    createNote(note, notesList, noteCreatingForm);
+    createNote(note);
   });
+
+  const drawNotesAmount = () => {
+    const activeTaskNotes = document.querySelector(".active-task-notes");
+    const archivedTaskNotes = document.querySelector(".archived-task-notes");
+    const activeThoughtsNotes = document.querySelector(
+      ".active-random-thought-notes"
+    );
+    const archivedThoughtsNotes = document.querySelector(
+      ".archived-random-thought-notes"
+    );
+    const activeIdeaNotes = document.querySelector(".active-idea-notes");
+    const archivedIdeaNotes = document.querySelector(".archived-idea-notes");
+    const activeQuoteNotes = document.querySelector(".active-quote-notes");
+    const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
+
+    const tasks = getNotesByCategory(data, "Task");
+    const activeTaskNotesAmount = getActiveNotes(tasks).length;
+    activeTaskNotes.innerText = activeTaskNotesAmount;
+    archivedTaskNotes.innerText = tasks.length - activeTaskNotesAmount;
+
+    const thoughts = getNotesByCategory(data, "Random Thought");
+    const activeThoughtsNotesAmount = getActiveNotes(thoughts).length;
+    activeThoughtsNotes.innerText = activeThoughtsNotesAmount;
+    archivedThoughtsNotes.innerText =
+      thoughts.length - activeThoughtsNotesAmount;
+
+    const ideas = getNotesByCategory(data, "Idea");
+    const activeIdeaNotesAmount = getActiveNotes(ideas).length;
+    activeIdeaNotes.innerText = activeIdeaNotesAmount;
+    archivedIdeaNotes.innerText = ideas.length - activeIdeaNotesAmount;
+
+    const quotes = getNotesByCategory(data, "Quote");
+    const activeQuoteNotesAmount = getActiveNotes(quotes).length;
+    activeQuoteNotes.innerText = activeQuoteNotesAmount;
+    archivedQuoteNotes.innerText = quotes.length - activeQuoteNotesAmount;
+  };
+
+  drawNotesAmount();
+
+  getArchivedNotes(data).map((note) => createArchivedNote(note));
 
   const handleDelete = (e, id) => {
     data = deleteNote(data, id);
-    e.target.closest("tr").remove();
+    removeClosestTr(e);
     drawNotesAmount();
   };
 
-  const handleEdit = () => {
+  const handleEdit = (data, id) => {
+    const note = findNoteById(data, id);
     const { title, category, content, noteId } = noteEditForm.elements;
-    noteEditForm.style.display = "flex";
+    showForm(noteEditForm);
 
     title.value = note.title;
     content.value = note.content;
@@ -127,15 +142,38 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return note;
     });
-    const archivedNote = data.find((note) => note.id === id);
-    createArchivedNote(archivedNote, archivedNotesList);
-    e.target.closest("tr").remove();
+    const note = findNoteById(data, id);
+    createArchivedNote(note);
+    removeClosestTr(e);
     drawNotesAmount();
   };
 
+  createNoteBtn.addEventListener("click", () => {
+    noteCreatingForm.classList.toggle("visible");
+  });
+
+  noteCreatingForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const noteCreatingForm = document.querySelector("#note-creating-form");
+    const { title, content, category } = noteCreatingForm.elements;
+    const note = {
+      title: title.value,
+      content: content.value,
+      category: category.value,
+      created: createDate(),
+      dates: checkForDates(content.value),
+      id: nanoid(),
+      active: true,
+    };
+    data.push(note);
+    createNote(note);
+    hideForm(noteCreatingForm);
+    drawNotesAmount();
+  });
+
   notesList.addEventListener("click", (e) => {
     const noteId = e.target.closest("tr").dataset.id;
-    const note = data.find((item) => item.id === noteId);
 
     if (e.target.matches(".delete")) {
       handleDelete(e, noteId);
@@ -146,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (e.target.matches(".edit")) {
-      handleEdit();
+      handleEdit(data, noteId);
     }
   });
 
@@ -160,44 +198,14 @@ document.addEventListener("DOMContentLoaded", () => {
           title: title.value,
           content: content.value,
           category: category.value,
-          dates: content.value.match(REGEXDATE),
+          dates: checkForDates(content.value),
         };
       }
       return note;
     });
-    updateNote(data.find((note) => note.id === noteId.value));
-    noteEditForm.style.display = "none";
+    updateNote(findNoteById(data, noteId.value));
+    hideForm(noteEditForm);
   });
-
-  const drawNotesAmount = () => {
-    const tasks = data.filter((note) => note.category === "Task");
-    const activeTaskNotesAmount = tasks.filter((note) => note.active).length;
-    activeTaskNotes.innerText = activeTaskNotesAmount;
-    archivedTaskNotes.innerText = tasks.length - activeTaskNotesAmount;
-
-    const thoughts = data.filter((note) => note.category === "Random Thought");
-    const activeThoughtsNotesAmount = thoughts.filter(
-      (note) => note.active
-    ).length;
-    activeThoughtsNotes.innerText = activeThoughtsNotesAmount;
-    archivedThoughtsNotes.innerText =
-      thoughts.length - activeThoughtsNotesAmount;
-
-    const ideas = data.filter((note) => note.category === "Idea");
-    const activeIdeaNotesAmount = ideas.filter((note) => note.active).length;
-    activeIdeaNotes.innerText = activeIdeaNotesAmount;
-    archivedIdeaNotes.innerText = ideas.length - activeIdeaNotesAmount;
-
-    const quotes = data.filter((note) => note.category === "Quote");
-    const activeQuoteNotesAmount = quotes.filter((note) => note.active).length;
-    activeQuoteNotes.innerText = activeQuoteNotesAmount;
-    archivedQuoteNotes.innerText = quotes.length - activeQuoteNotesAmount;
-  };
-  drawNotesAmount();
-
-  getArchivedNotes(data).map((note) =>
-    createArchivedNote(note, archivedNotesList)
-  );
 
   archivedNotesList.addEventListener("click", (e) => {
     const noteId = e.target.closest("tr").dataset.id;
@@ -211,8 +219,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return note;
       });
       drawNotesAmount();
-      createNote(note, notesList, noteCreatingForm);
-      e.target.closest("tr").remove();
+      createNote(note);
+      hideForm(noteCreatingForm);
+      removeClosestTr(e);
     }
   });
 });

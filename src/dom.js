@@ -30,9 +30,11 @@ export const getCategoryImage = (category) => {
   }
 };
 
-export const createNote = (note, list, form) => {
+export const createNote = (note) => {
   const activeNoteTemplate = document.querySelector("#active-note");
   const trNote = activeNoteTemplate.content.cloneNode(true).querySelector("tr");
+  const form = document.querySelector("#note-creating-form");
+  const list = document.querySelector("#notes-list");
 
   trNote.dataset.id = note.id;
 
@@ -47,9 +49,9 @@ export const createNote = (note, list, form) => {
   content.innerText = note.content;
   dates.innerText = note.dates;
 
-  list.append(trNote); //notesList
+  list.append(trNote);
 
-  form.reset(); //noteCreatingForm
+  form.reset();
 };
 
 export const updateNote = (note) => {
@@ -65,8 +67,9 @@ export const updateNote = (note) => {
   dates.innerText = note.dates;
 };
 
-export const createArchivedNote = (note, list) => {
+export const createArchivedNote = (note) => {
   const archivedNoteTemplate = document.querySelector("#archived-note");
+  const list = document.querySelector(".archived-notes");
   const trNote = archivedNoteTemplate.content
     .cloneNode(true)
     .querySelector("tr");
@@ -82,5 +85,17 @@ export const createArchivedNote = (note, list) => {
   content.innerText = note.content;
   dates.innerText = note.dates;
 
-  list.append(trNote); //archivedNotesList
+  list.append(trNote);
+};
+
+export const removeClosestTr = (e) => {
+  e.target.closest("tr").remove();
+};
+
+export const showForm = (form) => {
+  form.classList.add("visible");
+};
+
+export const hideForm = (form) => {
+  form.classList.remove("visible");
 };
