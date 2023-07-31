@@ -44,7 +44,7 @@ let data = [
     content: "Implement new 03/05/2021,to 05/05/2021",
     dates: "03/05/2021, 05/05/2021",
     id: "3",
-    active: false,
+    active: true,
   },
   {
     title: "William Gaddis",
@@ -63,6 +63,24 @@ let data = [
     dates: "",
     id: "5",
     active: true,
+  },
+  {
+    title: "React",
+    created: "June 15, 2020",
+    category: "Task",
+    content: "Learn Components",
+    dates: "",
+    id: "6",
+    active: false,
+  },
+  {
+    title: "Flowers",
+    created: "July 07, 2021",
+    category: "Idea",
+    content: "Plant new ones",
+    dates: "",
+    id: "7",
+    active: false,
   },
 ];
 
