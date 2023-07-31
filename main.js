@@ -1,20 +1,6 @@
+import { createNote, getCategoryImage } from "./src/dom";
 import "./style.css";
 import { nanoid } from "nanoid";
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const REGEXDATE =
   /(?:^|\D)(?:(?:0?[1-9]|[12][0-9]|3[01])\/(?:0?[1-9]|1[0-2])\/(?:\d{4}))(?:\D|$)/gm;
@@ -77,44 +63,6 @@ const getArchivedNotes = () => {
   return filtered;
 };
 
-const createDate = () => {
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth();
-  const year = date.getFullYear();
-  return `${MONTHS[month]} ${day}, ${year}`;
-};
-
-const getCategoryImage = (category) => {
-  const img = document.createElement("img");
-
-  switch (category) {
-    case "Task":
-      img.src = "./public/images/icons8-cart-30.png";
-      img.alt = "task";
-      return img;
-
-    case "Random Thought":
-      img.src = "./public/images/icons8-mind-30.png";
-      img.alt = "random thought";
-      return img;
-
-    case "Idea":
-      img.src = "./public/images/icons8-light-on-30.png";
-      img.alt = "idea";
-      return img;
-
-    case "Quote":
-      img.src = "./public/images/icons8-get-quote-30.png";
-      img.alt = "quote";
-      return img;
-    default:
-      img.src = "./public/images/icons8-cart-30.png";
-      img.alt = "quote";
-      return img;
-  }
-};
-
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.querySelector("#create-note-btn");
   const noteCreatingForm = document.querySelector("#note-creating-form");
@@ -154,35 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
     note.id = nanoid();
     note.active = true;
     data.push(note);
-    createNote(note);
+    createNote(note, noteList, noteCreatingForm);
     drawNotesAmount();
   });
 
-  const createNote = (note) => {
-    const trNote = activeNoteTemplate.content
-      .cloneNode(true)
-      .querySelector("tr");
-
-    trNote.dataset.id = note.id;
-
-    const [category, title, created, categoryText, content, dates] =
-      trNote.querySelectorAll("td");
-    title.innerText = note.title || "";
-    created.innerText = createDate();
-    categoryText.innerText = note.category;
-
-    category.append(getCategoryImage(note.category));
-
-    content.innerText = note.content;
-    dates.innerText = note.dates;
-
-    notesList.append(trNote);
-
-    noteCreatingForm.reset();
-  };
-
   getActiveNotes().map((note) => {
-    createNote(note);
+    createNote(note, notesList, noteCreatingForm);
   });
 
   notesList.addEventListener("click", (e) => {
@@ -313,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return note;
       });
       drawNotesAmount();
-      createNote(note);
+      createNote(note, notesList, noteCreatingForm);
       e.target.closest("tr").remove();
     }
   });
