@@ -51,3 +51,36 @@ export const createNote = (note, list, form) => {
 
   form.reset(); //noteCreatingForm
 };
+
+export const updateNote = (note) => {
+  const tr = document.querySelector(`[data-id="${note.id}"]`);
+
+  const [img, title, , category, content, dates] = tr.querySelectorAll("td");
+  title.innerText = note.title;
+  category.innerText = note.category;
+  content.innerText = note.content;
+  const image = img.querySelector("img");
+  img.removeChild(image);
+  img.append(getCategoryImage(note.category));
+  dates.innerText = note.dates;
+};
+
+export const createArchivedNote = (note, list) => {
+  const archivedNoteTemplate = document.querySelector("#archived-note");
+  const trNote = archivedNoteTemplate.content
+    .cloneNode(true)
+    .querySelector("tr");
+  const [category, title, created, categoryText, content, dates] =
+    trNote.querySelectorAll("td");
+
+  trNote.dataset.id = note.id;
+
+  title.innerText = note.title || "";
+  created.innerText = note.created;
+  categoryText.innerText = note.category;
+  category.append(getCategoryImage(note.category));
+  content.innerText = note.content;
+  dates.innerText = note.dates;
+
+  list.append(trNote); //archivedNotesList
+};

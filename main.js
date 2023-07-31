@@ -1,4 +1,5 @@
-import { createNote, getCategoryImage } from "./src/dom";
+import { createArchivedNote, createNote, updateNote } from "./src/dom";
+import { getActiveNotes, getArchivedNotes } from "./src/lib";
 import "./style.css";
 import { nanoid } from "nanoid";
 
@@ -53,16 +54,6 @@ let data = [
   },
 ];
 
-const getActiveNotes = () => {
-  const filtered = data.filter((note) => note.active);
-  return filtered;
-};
-
-const getArchivedNotes = () => {
-  const filtered = data.filter((note) => !note.active);
-  return filtered;
-};
-
 document.addEventListener("DOMContentLoaded", () => {
   const createNoteBtn = document.querySelector("#create-note-btn");
   const noteCreatingForm = document.querySelector("#note-creating-form");
@@ -83,8 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const archivedQuoteNotes = document.querySelector(".archived-quote-notes");
 
   const noteEditForm = document.querySelector("#note-edit-form");
-  const activeNoteTemplate = document.querySelector("#active-note");
-  const archivedNoteTemplate = document.querySelector("#archived-note");
 
   createNoteBtn.addEventListener("click", () => {
     noteCreatingForm.classList.toggle("visible");
@@ -106,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     drawNotesAmount();
   });
 
-  getActiveNotes().map((note) => {
+  getActiveNotes(data).map((note) => {
     createNote(note, notesList, noteCreatingForm);
   });
 
@@ -128,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return note;
       });
       const archivedNote = data.find((note) => note.id === noteId);
-      createArchiveNote(archivedNote);
+      createArchivedNote(archivedNote, archivedNotesList);
       e.target.closest("tr").remove();
       drawNotesAmount();
     }
@@ -163,23 +152,11 @@ document.addEventListener("DOMContentLoaded", () => {
     noteEditForm.style.display = "none";
   });
 
-  const updateNote = (note) => {
-    const tr = document.querySelector(`[data-id="${note.id}"]`);
-    console.log(tr);
-    const [img, title, , category, content, dates] = tr.querySelectorAll("td");
-    title.innerText = note.title;
-    category.innerText = note.category;
-    content.innerText = note.content;
-    const image = img.querySelector("img");
-    img.removeChild(image);
-    img.append(getCategoryImage(note.category));
-    dates.innerText = note.dates;
-  };
-
   const deleteNote = (id) => {
     const filteredData = data.filter((note) => note.id !== id);
     return filteredData;
   };
+
   const drawNotesAmount = () => {
     const tasks = data.filter((note) => note.category === "Task");
     const activeTaskNotesAmount = tasks.filter((note) => note.active).length;
@@ -206,25 +183,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   drawNotesAmount();
 
-  const createArchiveNote = (note) => {
-    const trNote = archivedNoteTemplate.content
-      .cloneNode(true)
-      .querySelector("tr");
-    const [category, title, created, categoryText, content, dates] =
-      trNote.querySelectorAll("td");
-
-    trNote.dataset.id = note.id;
-
-    title.innerText = note.title || "";
-    created.innerText = note.created;
-    categoryText.innerText = note.category;
-    category.append(getCategoryImage(note.category));
-    content.innerText = note.content;
-    dates.innerText = note.dates;
-
-    archivedNotesList.append(trNote);
-  };
-  getArchivedNotes().map((note) => createArchiveNote(note));
+  getArchivedNotes(data).map((note) =>
+    createArchivedNote(note, archivedNotesList)
+  );
 
   archivedNotesList.addEventListener("click", (e) => {
     const noteId = e.target.closest("tr").dataset.id;
