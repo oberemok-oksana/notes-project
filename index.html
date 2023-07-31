@@ -7,6 +7,62 @@
     <title>My notes</title>
   </head>
   <body>
+    <template id="active-note">
+      <tr class="table-data" data-id="5">
+        <td class="category"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="staticCell">
+            <img
+              class="edit"
+              src="./public/images/icons8-edit-24.png"
+              alt="edit"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="staticCell">
+            <img
+              src="./public/images/icons8-download-24.png"
+              alt="archive"
+              class="archive"
+            />
+          </div>
+        </td>
+        <td>
+          <div class="staticCell">
+            <img
+              class="delete"
+              src="./public/images/icons8-delete-24.png"
+              alt="delete"
+            />
+          </div>
+        </td>
+      </tr>
+    </template>
+    <template id="archived-note">
+      <tr class="table-data" data-id="3">
+        <td class="category"></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="staticCell">
+            <img
+              src="./public/images/icons8-download-24.png"
+              alt="archive"
+              class="archive"
+            />
+          </div>
+        </td>
+      </tr>
+    </template>
     <main>
       <table class="table">
         <thead>
@@ -26,96 +82,158 @@
             </th>
           </tr>
         </thead>
-        <tbody class="grid">
-          <tr class="table-data">
-            <td>
-              <div class="category">
-                <img
-                  src="./public/images/icons8-cart-30.png"
-                  alt="shopping cart"
-                />
-              </div>
-            </td>
-            <td>Shopping list</td>
-            <td>April 20, 2021</td>
-            <td>task</td>
-            <td>Tomatoes, bread</td>
-            <td></td>
-            <td><img src="./public/images/icons8-edit-24.png" alt="edit" /></td>
-            <td>
-              <img src="./public/images/icons8-download-24.png" alt="archive" />
-            </td>
-            <td>
-              <img src="./public/images/icons8-delete-24.png" alt="delete" />
-            </td>
-          </tr>
-          <tr class="table-data">
-            <td>
-              <div class="category">
-                <img
-                  src="./public/images/icons8-mind-30.png"
-                  alt="head with an idea"
-                />
-              </div>
-            </td>
-            <td>The theory of evolut..</td>
-            <td>April 27, 2021</td>
-            <td>Random thought</td>
-            <td>The evolution</td>
-            <td></td>
-            <td><img src="./public/images/icons8-edit-24.png" alt="edit" /></td>
-            <td>
-              <img src="./public/images/icons8-download-24.png" alt="archive" />
-            </td>
-            <td>
-              <img src="./public/images/icons8-delete-24.png" alt="delete" />
-            </td>
-          </tr>
-          <tr class="table-data">
-            <td>
-              <div class="category">
-                <img
-                  src="./public/images/icons8-light-on-30.png"
-                  alt="lamp bulb"
-                />
-              </div>
-            </td>
-            <td>New Feature</td>
-            <td>May 05, 2021</td>
-            <td>Idea</td>
-            <td>Implement new</td>
-            <td>3/5/2021, 5/5/2021</td>
-            <td><img src="./public/images/icons8-edit-24.png" alt="edit" /></td>
-            <td>
-              <img src="./public/images/icons8-download-24.png" alt="archive" />
-            </td>
-            <td>
-              <img src="./public/images/icons8-delete-24.png" alt="delete" />
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="notes-list"></tbody>
       </table>
-      <button class="button">Create Note</button>
-    </main>
-    <div class="card">
-      <input class="input" type="text" id="name" placeholder="Note title" />
-      <div class="wrapper">
-        <label for="categories">Choose a note category:</label>
-        <select class="select" name="categories" id="categories">
-          <option value="task">Task</option>
-          <option value="thought">Random Thought</option>
-          <option value="idea">Idea</option>
-        </select>
+      <div class="button-wrapper">
+        <button class="button" id="create-note-btn">Create Note</button>
       </div>
-      <textarea
-        class="input"
-        name="note"
-        id="note-content"
-        cols="30"
-        rows="10"
-      ></textarea>
-      <button class="button">Save</button>
-    </div>
+      <form class="card" id="note-creating-form">
+        <input
+          class="input"
+          name="title"
+          type="text"
+          id="name"
+          placeholder="Note title"
+          required
+        />
+        <div class="wrapper">
+          <label for="categories">Choose a note category:</label>
+          <select class="select" name="category" id="categories" required>
+            <option value="">Choose something</option>
+            <option value="Task">Task</option>
+            <option value="Random Thought">Random Thought</option>
+            <option value="Idea">Idea</option>
+            <option value="Quote">Quote</option>
+          </select>
+        </div>
+
+        <textarea
+          class="input"
+          name="content"
+          id="note-content"
+          cols="30"
+          rows="10"
+          required
+        ></textarea>
+
+        <button type="submit" class="button" id="save-note-btn">Save</button>
+      </form>
+      <form class="card" id="note-edit-form">
+        <input type="hidden" name="noteId" id="hidden" />
+        <input
+          name="title"
+          class="input"
+          type="text"
+          id="form-edit__title"
+          placeholder="Note title"
+          required
+        />
+        <div class="wrapper">
+          <label for="categories">Choose a note category:</label>
+          <select
+            class="select"
+            name="category"
+            id="form-edit__categories"
+            required
+          >
+            <option value="">Choose something</option>
+            <option value="Task">Task</option>
+            <option value="Random Thought">Random Thought</option>
+            <option value="Idea">Idea</option>
+            <option value="Quote">Quote</option>
+          </select>
+        </div>
+
+        <textarea
+          class="input"
+          name="content"
+          id="note-edit-content"
+          cols="30"
+          rows="10"
+          required
+        ></textarea>
+
+        <button type="submit" class="button" id="save-edit-note-btn">
+          Save
+        </button>
+      </form>
+
+      <div>
+        <table class="table">
+          <thead class="table-head">
+            <tr>
+              <th></th>
+              <th>Note Category</th>
+              <th>Active</th>
+              <th>Archived</th>
+            </tr>
+          </thead>
+          <tbody class="archive">
+            <tr class="table-data">
+              <td class="category">
+                <img src="./public//images/icons8-cart-30.png" alt="cart" />
+              </td>
+              <td>Task</td>
+              <td class="active-task-notes">0</td>
+              <td class="archived-task-notes">0</td>
+            </tr>
+            <tr class="table-data">
+              <td class="category">
+                <img
+                  src="./public//images/icons8-mind-30.png"
+                  alt="random thought"
+                />
+              </td>
+              <td>Random Thought</td>
+              <td class="active-random-thought-notes">0</td>
+              <td class="archived-random-thought-notes">0</td>
+            </tr>
+            <tr class="table-data">
+              <td class="category">
+                <img src="./public//images/icons8-light-on-30.png" alt="idea" />
+              </td>
+              <td>Idea</td>
+              <td class="active-idea-notes">0</td>
+              <td class="archived-idea-notes">0</td>
+            </tr>
+            <tr class="table-data">
+              <td class="category">
+                <img
+                  src="./public//images/icons8-get-quote-30.png"
+                  alt="quote"
+                />
+              </td>
+              <td>Quote</td>
+              <td class="active-quote-notes">0</td>
+              <td class="archived-quote-notes">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Archived notes</h3>
+        <table class="archived-notes table">
+          <thead>
+            <tr class="table-head">
+              <th></th>
+              <th>Name</th>
+              <th>Created</th>
+              <th>Category</th>
+              <th>Content</th>
+              <th>Dates</th>
+              <th>
+                <img
+                  src="./public/images/icons8-download-24.png"
+                  alt="archive"
+                />
+              </th>
+            </tr>
+          </thead>
+          <tbody class="archived-notes"></tbody>
+        </table>
+      </div>
+    </main>
+
     <script type="module" src="/main.js"></script>
   </body>
 </html>
